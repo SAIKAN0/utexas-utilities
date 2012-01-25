@@ -52,10 +52,10 @@ public class UTilitiesActivity extends TabActivity {
         final Intent schedule = new Intent(getBaseContext(), ScheduleActivity.class);
     	final Intent balance = new Intent(getBaseContext(), BalanceActivity.class);
     	final Intent map = new Intent(getBaseContext(), CampusMapActivity.class);
-    	final Intent data = new Intent(getBaseContext(), DataUsageActivity.class);
+   // 	final Intent data = new Intent(getBaseContext(), DataUsageActivity.class);
     	about_intent = new Intent(this, AboutMeActivity.class);
     	
-    	 Resources res = getResources(); // Resource object to get Drawables
+/*    	 Resources res = getResources(); // Resource object to get Drawables
     	    TabHost tabHost = getTabHost();  // The activity TabHost
     	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
     	   
@@ -87,7 +87,7 @@ public class UTilitiesActivity extends TabActivity {
     	                  .setContent(data);
     	    tabHost.addTab(spec);
 
-    	    tabHost.setCurrentTab(0);
+    	    tabHost.setCurrentTab(0);*/
     
     	
    // 	BitmapDrawable bmd = (BitmapDrawable) getResources().getDrawable(R.drawable.main_background);
@@ -117,7 +117,7 @@ public class UTilitiesActivity extends TabActivity {
         
         
         
-  /*      final ImageButton schedulebutton = (ImageButton) findViewById(R.id.schedule_button);
+      final ImageButton schedulebutton = (ImageButton) findViewById(R.id.schedule_button);
         schedulebutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	if(!ConnectionHelper.cookieHasBeenSet() && new ClassDatabase(UTilitiesActivity.this).size()==0)// && (!settings.getBoolean("loginpref", true)||!settings.contains("eid") || !settings.contains("password")||settings.getString("eid", "error").equals("")||settings.getString("password", "error").equals("")))
@@ -141,7 +141,7 @@ public class UTilitiesActivity extends TabActivity {
             					!settings.contains("eid") || 
             					!settings.contains("password")||
             					settings.getString("eid", "error").equals("")||
-            					settings.getString("password", "error").equals("")))
+            					settings.getString("password", "error").equals("")))*/
             	{
             		Toast.makeText(UTilitiesActivity.this, "Please log in before using this feature",Toast.LENGTH_SHORT).show();
             	}
@@ -163,7 +163,7 @@ public class UTilitiesActivity extends TabActivity {
             }
             
     });
-        final ImageButton databutton = (ImageButton) findViewById(R.id.data_button);
+ /*       final ImageButton databutton = (ImageButton) findViewById(R.id.data_button);
         databutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
@@ -178,8 +178,8 @@ public class UTilitiesActivity extends TabActivity {
             		
             }
             
-    });*/
- /*       final ImageButton examsbutton = (ImageButton) findViewById(R.id.exams_button);
+    });
+       final ImageButton examsbutton = (ImageButton) findViewById(R.id.exams_button);
         examsbutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
