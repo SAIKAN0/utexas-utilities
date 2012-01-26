@@ -1,36 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/tabhost"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="5dp">
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:padding="5dp" />
-    </LinearLayout>
-</TabHost>
-<!-- <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/button_table"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/main_background">
-<TableRow
+<!--<TableRow
 	android:paddingTop="64dp">
 	<ImageButton
 		android:layout_weight="1"
-	
 		android:id="@+id/schedule_button"
 		android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
@@ -55,30 +32,11 @@
     android:id="@+id/map_button" 
     android:layout_height="wrap_content" 
     android:layout_gravity="center" 
-    android:layout_width="wrap_content" 
+    android:layout_width="wrap_content"
     android:background="#00000000"></ImageButton>
     
-    <ImageButton android:src="@drawable/data_image_button" 
-    android:layout_weight="1"
-    android:id="@+id/data_button" 
-    android:layout_height="wrap_content" 
-    android:layout_gravity="center" 
-    android:layout_width="wrap_content" 
-    android:background="#00000000"></ImageButton>
-		
-</TableRow> 
 
-	<TableRow
-	android:layout_width="wrap_content" android:baselineAligned="true" android:paddingTop="47dp">
-	<ImageButton android:src="@drawable/map_image_button" 
-    android:layout_weight="1"
-    android:id="@+id/exams_button" 
-    android:layout_height="wrap_content" 
-    android:layout_gravity="center" 
-    android:layout_width="wrap_content" 
-    android:background="#00000000"></ImageButton>
-	
-	
-	
-	</TableRow>
-</TableLayout> -->
+		
+</TableRow> -->
+
+</TableLayout>
