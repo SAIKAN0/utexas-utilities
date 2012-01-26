@@ -56,7 +56,7 @@ public class ScheduleActivity extends Activity implements SlidingDrawer.OnDrawer
 		cdb = new ClassDatabase(this);
 		sd = (WrappingSlidingDrawer) findViewById(R.id.drawer);
 	    sdll = (LinearLayout) findViewById(R.id.llsd);
-	    ca = new ClassAdapter(this,sd,sdll);
+	   
 			
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
 		public void uncaughtException(Thread thread, Throwable ex)
@@ -84,6 +84,7 @@ public class ScheduleActivity extends Activity implements SlidingDrawer.OnDrawer
 		else
 		{
 			
+			 ca = new ClassAdapter(this,sd,sdll);
 			ca.updateTime();
 			gv = (GridView) findViewById(R.id.scheduleview);
 			gv.setOnItemLongClickListener(ca);
