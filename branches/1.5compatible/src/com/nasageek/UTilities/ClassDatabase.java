@@ -16,7 +16,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 	private Context context;
 //	private String[] colors = {"00b060","ff4500","ff9200","793a8c","06799f","ff5d40","a6b900"};
 	private String[] colors = {"b56eb3","488ab0","00b060","78ffed","81b941","ff866e","ffe45e"};
-	private double oldH=0; 
+	
 	private int count;
 	private SQLiteDatabase sqldb;
 	private static final String KEY_EID = "eid";
@@ -71,23 +71,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		ContentValues val = null;
 		sqldb=getWritableDatabase();
-		
-		double H = Math.random();
-		while(Math.abs(H-oldH)<.1)H=Math.random();
-		double S = 131.0/240;
-		double L = 127.0/240;
 
-		int R,G,B;
-		double var_1, var_2;
-		
-		   if ( L < 0.5 ) var_2 = L * ( 1 + S );
-				   else  var_2 = ( L + S ) - ( S * L );
-
-			var_1 = 2 * L - var_2;
-
-			R = (int)(255 * Hue_2_RGB( var_1, var_2, H + ( 1.0 / 3 ) )) ;
-			G = (int)(255 * Hue_2_RGB( var_1, var_2, H ));
-			B = (int)(255 * Hue_2_RGB( var_1, var_2, H - ( 1.0 / 3 ) ));
 		Log.d("count",count+"");	
 		String colorhex = colors[count++];
 			//String.format("%02X",R)+String.format("%02X",G)+String.format("%02X",B);
@@ -109,17 +93,8 @@ public class ClassDatabase extends SQLiteOpenHelper
 			
 			sqldb.insert(TABLE_NAME, null, val);
 		}
-		sqldb.close();
-		oldH = H;
-	}
-	private double Hue_2_RGB(double v1,double v2,double vH )             //Function Hue_2_RGB
-	{
-		   if ( vH < 0 ) vH += 1;
-		   if ( vH > 1 ) vH -= 1;
-		   if ( ( 6 * vH ) < 1 ) return ( v1 + ( v2 - v1 ) * 6 * vH );
-		   if ( ( 2 * vH ) < 1 ) return ( v2 );
-		   if ( ( 3 * vH ) < 2 ) return ( v1 + ( v2 - v1 ) * ( ( 2.0 / 3 ) - vH ) * 6 );
-		   return  v1 ;
+	//	sqldb.close();
+		
 	}
 	public String getColor(String unique, String start, String day)
 	{
@@ -147,7 +122,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 		
 		int temp = cur.getCount();
 		cur.close();
-	//	sqldb.close();
+		sqldb.close();
 		
 		return temp;
 	}
@@ -158,6 +133,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 
 		sqldb.execSQL("DROP TABLE "+TABLE_NAME);
 		sqldb.execSQL(TABLE_CREATE);
+		sqldb.close();
 	}
 
 }

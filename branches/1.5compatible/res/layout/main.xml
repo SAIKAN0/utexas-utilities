@@ -4,10 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/main_background">
-<!--<TableRow
+<TableRow
 	android:paddingTop="64dp">
 	<ImageButton
 		android:layout_weight="1"
+	
 		android:id="@+id/schedule_button"
 		android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
@@ -32,11 +33,9 @@
     android:id="@+id/map_button" 
     android:layout_height="wrap_content" 
     android:layout_gravity="center" 
-    android:layout_width="wrap_content"
+    android:layout_width="wrap_content" 
     android:background="#00000000"></ImageButton>
     
-
-		
-</TableRow> -->
+</TableRow> 
 
 </TableLayout>
