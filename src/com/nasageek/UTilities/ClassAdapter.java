@@ -110,6 +110,8 @@ public class ClassAdapter extends BaseAdapter implements AdapterView.OnItemClick
 	//		}
 			
 		}
+		cur.close();
+		sqldb.close();
 		
 
 	}
@@ -313,7 +315,7 @@ public class ClassAdapter extends BaseAdapter implements AdapterView.OnItemClick
 	    		sdll.addView(tv);
 
 	    	}
-		    
+		    cur.close();
 		    sd.open();
 		}
 		else

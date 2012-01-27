@@ -56,8 +56,9 @@ public class ScheduleActivity extends Activity implements SlidingDrawer.OnDrawer
 		cdb = new ClassDatabase(this);
 		sd = (WrappingSlidingDrawer) findViewById(R.id.drawer);
 	    sdll = (LinearLayout) findViewById(R.id.llsd);
-	   
-			
+	    ca = new ClassAdapter(this,sd,sdll);
+	    gv = (GridView) findViewById(R.id.scheduleview);	
+	    
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
 		public void uncaughtException(Thread thread, Throwable ex)
 		{
@@ -75,18 +76,20 @@ public class ScheduleActivity extends Activity implements SlidingDrawer.OnDrawer
 	//		TimingLogger timings = new TimingLogger("Timing", "talk to website, parse, add classes");
 		if (sizecheck.getCount()<1)
 		{	
+			sizecheck.close();
 			pd = ProgressDialog.show(this, "", "Loading. Please wait...");
 			//	Log.d("SCHEDULE", "parsing");
 			//	timings.addSplit("split");
 			    parser();
 			//  timings.addSplit("finished");
+			    
 		}
 		else
 		{
 			
-			 ca = new ClassAdapter(this,sd,sdll);
+			sizecheck.close(); 
 			ca.updateTime();
-			gv = (GridView) findViewById(R.id.scheduleview);
+			
 			gv.setOnItemLongClickListener(ca);
 			gv.setOnItemClickListener(ca);
 		    gv.setAdapter(ca);
@@ -242,7 +245,6 @@ public class ScheduleActivity extends Activity implements SlidingDrawer.OnDrawer
 			{
 				ca = new ClassAdapter(ScheduleActivity.this,sd,sdll);
 				ca.updateTime();
-				gv = (GridView) findViewById(R.id.scheduleview);
 				gv.setOnItemLongClickListener(ca);
 				gv.setOnItemClickListener(ca);
 			    gv.setAdapter(ca);
