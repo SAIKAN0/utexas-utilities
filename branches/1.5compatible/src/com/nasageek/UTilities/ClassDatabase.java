@@ -15,8 +15,8 @@ public class ClassDatabase extends SQLiteOpenHelper
 {
 	private Context context;
 //	private String[] colors = {"00b060","ff4500","ff9200","793a8c","06799f","ff5d40","a6b900"};
-	private String[] colors = {"b56eb3","488ab0","00b060","78ffed","81b941","ff866e","ffe45e"};
-	
+	private String[] colors = {"ffe45e","ff866e","b56eb3","488ab0","00b060","94c6ff","81b941"};
+
 	private int count;
 	private SQLiteDatabase sqldb;
 	private static final String KEY_EID = "eid";
@@ -72,7 +72,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 		ContentValues val = null;
 		sqldb=getWritableDatabase();
 
-		Log.d("count",count+"");	
+		
 		String colorhex = colors[count++];
 			//String.format("%02X",R)+String.format("%02X",G)+String.format("%02X",B);
 			
@@ -93,7 +93,7 @@ public class ClassDatabase extends SQLiteOpenHelper
 			
 			sqldb.insert(TABLE_NAME, null, val);
 		}
-	//	sqldb.close();
+		sqldb.close();
 		
 	}
 	public String getColor(String unique, String start, String day)
@@ -102,8 +102,9 @@ public class ClassDatabase extends SQLiteOpenHelper
 		Cursor cur = sqldb.rawQuery("SELECT " +KEY_COLOR+" FROM "+TABLE_NAME+" WHERE "+KEY_UNIQUEID+" = "+"\""+unique+"\" AND "+KEY_DAY+" = "+"\""+day+"\" AND "+KEY_START+" = "+"\""+start+"\"", null);
 		cur.moveToFirst();
 		String temp = cur.getString(0);
-		sqldb.close();
 		cur.close();
+		sqldb.close();
+		
 		return temp;
 	}
 

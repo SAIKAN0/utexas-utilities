@@ -34,8 +34,8 @@ public class Preferences extends PreferenceActivity {
 	boolean set;
 	boolean pnalogindone, logindone;
 	SharedPreferences settings;
-	Preference loginfield;
-    Preference passwordfield;
+    Preference loginfield,passwordfield, loginButton;
+   
     BaseAdapter ba;
     
     
@@ -54,7 +54,7 @@ public class Preferences extends PreferenceActivity {
         else loginfields.setEnabled(true);*/
         loginfield = (Preference) findPreference("eid");
         passwordfield = (Preference) findPreference("password");
-        final Preference loginButton = (Preference) findPreference("loggedin");
+        loginButton = (Preference) findPreference("loggedin");
         final Preference logincheckbox = (Preference) findPreference("loginpref");
         
         
@@ -108,19 +108,6 @@ public class Preferences extends PreferenceActivity {
             }
 
     });
-      
-      if(ConnectionHelper.cookieHasBeenSet() && loginButton.isEnabled())
-      {
-    	  loginButton.setTitle("Logout");
-    	  loginfield.setEnabled(false);
-    	  passwordfield.setEnabled(false);
-      }
-      else
-      {
-    	  loginButton.setTitle("Login");
-    	  loginfield.setEnabled(true);
-    	  passwordfield.setEnabled(true);      
-    }
       
       loginButton.setOnPreferenceClickListener(new OnPreferenceClickListener(){
     	  
@@ -210,6 +197,25 @@ public class Preferences extends PreferenceActivity {
         });*/
         
                 
+    }
+    @Override
+    public void onResume()
+    {
+    	super.onResume();
+    	 if(ConnectionHelper.cookieHasBeenSet() && loginButton.isEnabled())
+         {
+       	  loginButton.setTitle("Logout");
+       	  loginfield.setEnabled(false);
+       	  passwordfield.setEnabled(false);
+       	  ba.notifyDataSetChanged();
+         }
+         else
+         {
+       	  loginButton.setTitle("Login");
+       	  loginfield.setEnabled(true);
+       	  passwordfield.setEnabled(true); 
+       	  ba.notifyDataSetChanged();
+       }
     }
 
     private class loginTask extends AsyncTask<Object,Void,Boolean>
