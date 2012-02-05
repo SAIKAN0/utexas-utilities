@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -36,6 +37,8 @@ public class Preferences extends PreferenceActivity {
 	SharedPreferences settings;
 	Preference loginfield;
     Preference passwordfield;
+ Preference loggedIn;
+ Editor edit;
     BaseAdapter ba;
     
     
@@ -44,7 +47,7 @@ public class Preferences extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        
+       edit = settings.edit();
         addPreferencesFromResource(R.xml.preferences);
         ba = (BaseAdapter)getPreferenceScreen().getRootAdapter();
    //     PreferenceGroup loginfields = (PreferenceGroup) findPreference("loginfields");
@@ -52,6 +55,7 @@ public class Preferences extends PreferenceActivity {
     /*    if(!settings.getBoolean("loginpref", true))
         	loginfields.setEnabled(false);
         else loginfields.setEnabled(true);*/
+  
         loginfield = (Preference) findPreference("eid");
         passwordfield = (Preference) findPreference("password");
         final Preference loginButton = (Preference) findPreference("loggedin");
@@ -121,6 +125,13 @@ public class Preferences extends PreferenceActivity {
     	  loginfield.setEnabled(true);
     	  passwordfield.setEnabled(true);      
     }
+      loginButton.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+      });
+      
       
       loginButton.setOnPreferenceClickListener(new OnPreferenceClickListener(){
     	  
@@ -247,6 +258,9 @@ public class Preferences extends PreferenceActivity {
 					loginfield.setEnabled(false);
 			    	passwordfield.setEnabled(false);
 					ba.notifyDataSetChanged();
+					
+					edit.putBoolean("loggedin", true);
+					edit.commit();
 				 }
 			}
 		}
@@ -288,6 +302,9 @@ public class Preferences extends PreferenceActivity {
 					loginfield.setEnabled(false);
 			    	passwordfield.setEnabled(false);
 					ba.notifyDataSetChanged();
+					
+					edit.putBoolean("loggedin", true);
+					edit.commit();
 				 }
 			}
 		}
