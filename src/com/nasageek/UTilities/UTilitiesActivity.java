@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
+import android.preference.Preference;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +18,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -88,7 +91,7 @@ public class UTilitiesActivity extends TabActivity {
     	    tabHost.addTab(spec);
 
     	    tabHost.setCurrentTab(0);
-    
+    	    
     	
    // 	BitmapDrawable bmd = (BitmapDrawable) getResources().getDrawable(R.drawable.main_background);
    // 	bmd.setDither(true);
@@ -114,9 +117,7 @@ public class UTilitiesActivity extends TabActivity {
         	AlertDialog nologin = nologin_builder.create();
         	nologin.show();
         }
-        
-        
-        
+      
   /*      final ImageButton schedulebutton = (ImageButton) findViewById(R.id.schedule_button);
         schedulebutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

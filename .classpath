@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/UTilities/libs/Androidplot-core-0.4.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
