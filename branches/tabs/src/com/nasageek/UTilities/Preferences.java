@@ -34,10 +34,10 @@ public class Preferences extends PreferenceActivity {
 
 	boolean set;
 	boolean pnalogindone, logindone;
+	Toast toast;
 	SharedPreferences settings;
-	Preference loginfield;
+	Preference loginfield, loginButton;
     Preference passwordfield;
- Preference loggedIn;
  Editor edit;
     BaseAdapter ba;
     
@@ -48,6 +48,7 @@ public class Preferences extends PreferenceActivity {
 
         settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
        edit = settings.edit();
+       toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
         addPreferencesFromResource(R.xml.preferences);
         ba = (BaseAdapter)getPreferenceScreen().getRootAdapter();
    //     PreferenceGroup loginfields = (PreferenceGroup) findPreference("loginfields");
@@ -55,10 +56,9 @@ public class Preferences extends PreferenceActivity {
     /*    if(!settings.getBoolean("loginpref", true))
         	loginfields.setEnabled(false);
         else loginfields.setEnabled(true);*/
-  
         loginfield = (Preference) findPreference("eid");
         passwordfield = (Preference) findPreference("password");
-        final Preference loginButton = (Preference) findPreference("loggedin");
+       loginButton = (Preference) findPreference("loggedin");
         final Preference logincheckbox = (Preference) findPreference("loginpref");
         
         
@@ -141,7 +141,9 @@ public class Preferences extends PreferenceActivity {
     		 
     		 if(preference.getTitle().equals("Login"))
     		 {
-    			 Toast.makeText(Preferences.this, "Logging in...", Toast.LENGTH_SHORT).show();
+    			 toast.setText("Logging in...");
+    			 toast.setDuration(Toast.LENGTH_LONG);
+    			 toast.show();
  
     			 ConnectionHelper ch = new ConnectionHelper(Preferences.this);
     			 DefaultHttpClient httpclient = ConnectionHelper.getThreadSafeClient();
@@ -157,7 +159,10 @@ public class Preferences extends PreferenceActivity {
     				 settings.getString("eid", "error").equals("") ||
     				 settings.getString("password", "error").equals("") )
   				 {	
-    				 Toast.makeText(Preferences.this, "Please enter your credentials to log in", Toast.LENGTH_LONG).show();
+    				toast.setText("Please enter your credentials to log in");
+        			 toast.setDuration(Toast.LENGTH_LONG);
+        			 toast.show();
+    				 
     				 return true;
   				 }
     			 
@@ -190,22 +195,7 @@ public class Preferences extends PreferenceActivity {
                     return true;
             }
 
-    });
-  /*      Preference resettransactionsbutton = (Preference) findPreference("resettransactionsbutton");
-        resettransactionsbutton.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-       	 
-            public boolean onPreferenceClick(Preference preference) {
-            	File transfile = Preferences.this.getFileStreamPath("transactions.tmp");
-            	if(transfile!=null && transfile.exists())
-            	{	transfile.delete();
-                    }
-            	Toast.makeText(getBaseContext(), "Transactions deleted!", Toast.LENGTH_SHORT).show();
-                    return true;
-            }
-
-    });*/
-        
-        
+    });     
         
 /*        Preference eidfield = (Preference) findPreference("eid");
         eidfield.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
@@ -222,8 +212,26 @@ public class Preferences extends PreferenceActivity {
         
                 
     }
-
-    private class loginTask extends AsyncTask<Object,Void,Boolean>
+ @Override
+    public void onResume()
+    {
+    	super.onResume();
+    	if(ConnectionHelper.cookieHasBeenSet() && loginButton.isEnabled())
+        {
+      	  loginButton.setTitle("Logout");
+      	  loginfield.setEnabled(false);
+      	  passwordfield.setEnabled(false);
+      	  ba.notifyDataSetChanged();
+        }
+        else
+        {
+      	  loginButton.setTitle("Login");
+      	  loginfield.setEnabled(true);
+      	  passwordfield.setEnabled(true);  
+      	  ba.notifyDataSetChanged();
+      }
+    }
+    private class loginTask extends AsyncTask<Object,Integer,Boolean>
 	{
 		
 		DefaultHttpClient pnahttpclient;
@@ -237,12 +245,28 @@ public class Preferences extends PreferenceActivity {
 			this.preference = pref;
 			
 		}
-    	
+    	@Override
     	protected Boolean doInBackground(Object... params)
 		{
-			return ((ConnectionHelper)params[0]).Login(Preferences.this, (DefaultHttpClient)httpclient);	
+			boolean loginStatus = ((ConnectionHelper)params[0]).Login(Preferences.this, (DefaultHttpClient)httpclient);
+			publishProgress(loginStatus?0:1);
+			return loginStatus;
+			
+				
 		}
-		
+    	@Override
+		protected void onProgressUpdate(Integer... progress)
+		{
+			
+    		switch(progress[0])
+			{
+    		case 1:
+    		Toast.makeText(Preferences.this, "There was an error while connecting to UTDirect, please check your internet connection and try again", Toast.LENGTH_LONG).show();
+				
+				break;
+    		case 0:break;
+			}
+		}
 		@Override
 		protected void onPostExecute(Boolean b)
 		{
@@ -266,7 +290,7 @@ public class Preferences extends PreferenceActivity {
 		}
 		
 	}
-    private class PNALoginTask extends AsyncTask<Object,Void,Boolean>
+    private class PNALoginTask extends AsyncTask<Object,Integer,Boolean>
 	{
     	
 		DefaultHttpClient pnahttpclient;
@@ -282,11 +306,26 @@ public class Preferences extends PreferenceActivity {
 		}
     	
     	
+		@Override
+		protected void onProgressUpdate(Integer... progress)
+		{
+			
+    		switch(progress[0])
+			{
+    		case 1:
+    		Toast.makeText(Preferences.this, "There was an error while connecting to UT PNA, please check your internet connection and try again", Toast.LENGTH_LONG).show();
+				
+				break;
+    		case 0:break;
+			}
+		}
+    	
 		protected Boolean doInBackground(Object... params)
 		{
-			return ((ConnectionHelper)params[0]).PNALogin(Preferences.this, (DefaultHttpClient)pnahttpclient);	
+			boolean pnaLoginStatus = ((ConnectionHelper)params[0]).PNALogin(Preferences.this, (DefaultHttpClient)pnahttpclient);
+			publishProgress(pnaLoginStatus?0:1);
+			return pnaLoginStatus;
 		}
-		
 		@Override
 		protected void onPostExecute(Boolean b)
 		{
