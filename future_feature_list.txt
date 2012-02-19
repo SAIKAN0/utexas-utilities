@@ -2,3 +2,4 @@ making bus stops appear within a radius of the user rather than the current rout
 nutrition facts and general campus eatery information pertaining to menus and the such
 longclick buildings for directions
 variable number of balance tabs (set up programmatically?)
+class editor
