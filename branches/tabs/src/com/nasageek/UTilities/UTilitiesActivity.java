@@ -1,9 +1,13 @@
 package com.nasageek.UTilities;
 
 import java.util.ArrayList;
+import android.support.v4.app.ActionBar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.preference.Preference;
@@ -19,9 +23,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.view.Menu;
+
 import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,15 +33,17 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class UTilitiesActivity extends TabActivity {
+public class UTilitiesActivity extends FragmentActivity {
     
 	ProgressDialog pd; 
 	SharedPreferences settings;
@@ -57,40 +63,26 @@ public class UTilitiesActivity extends TabActivity {
     	final Intent map = new Intent(getBaseContext(), CampusMapActivity.class);
     	final Intent data = new Intent(getBaseContext(), DataUsageActivity.class);
     	about_intent = new Intent(this, AboutMeActivity.class);
+    	ActionBar bar =  this.getSupportActionBar();
+    	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+ //   	bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+  //  	bar.setDisplayShowHomeEnabled(false);
+   	    bar.setDisplayShowTitleEnabled(true);
+    	bar.addTab(bar.newTab()
+    				.setText("Default"), true);
+    	bar.addTab(bar.newTab()
+    				.setText("Default2"),false);
     	
-    	 Resources res = getResources(); // Resource object to get Drawables
-    	    TabHost tabHost = getTabHost();  // The activity TabHost
-    	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-    	   
-
-    	    spec = tabHost.newTabSpec("about").setIndicator("About",
-                    res.getDrawable(R.drawable.icon))
-                .setContent(about_intent);
-    	    tabHost.addTab(spec);
-
-
-    	    
-    	    
-    	    // Initialize a TabSpec for each tab and add it to the TabHost
-    	    spec = tabHost.newTabSpec("schedule").setIndicator("Schedule",
-    	                      res.getDrawable(R.drawable.schedule_image_button))
-    	                  .setContent(schedule);
-    	    tabHost.addTab(spec);
-
-    	    // Do the same for the other tabs
-    	   
-    	    spec = tabHost.newTabSpec("balance").setIndicator("Balances",
-    	                      res.getDrawable(R.drawable.balance_image_button))
-    	                  .setContent(balance);
-    	    tabHost.addTab(spec);
-
-    	   
-    	    spec = tabHost.newTabSpec("data").setIndicator("Data Usage",
-    	                      res.getDrawable(R.drawable.data_image_button))
-    	                  .setContent(data);
-    	    tabHost.addTab(spec);
-
-    	    tabHost.setCurrentTab(0);
+    	
+    	FrameLayout fl = (FrameLayout) this.findViewById(R.id.main_frame);
+    
+    	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    	DialogFragment newFragment = new DialogFragment();
+    	newFragment.setShowsDialog(false);
+    	ft.add(newFragment,"tag");
+    	ft.commit();
+    	
+    
     	    
     	
    // 	BitmapDrawable bmd = (BitmapDrawable) getResources().getDrawable(R.drawable.main_background);
@@ -118,7 +110,7 @@ public class UTilitiesActivity extends TabActivity {
         	nologin.show();
         }
       
-  /*      final ImageButton schedulebutton = (ImageButton) findViewById(R.id.schedule_button);
+ /*       final ImageButton schedulebutton = (ImageButton) findViewById(R.id.schedule_button);
         schedulebutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	if(!ConnectionHelper.cookieHasBeenSet() && new ClassDatabase(UTilitiesActivity.this).size()==0)// && (!settings.getBoolean("loginpref", true)||!settings.contains("eid") || !settings.contains("password")||settings.getString("eid", "error").equals("")||settings.getString("password", "error").equals("")))
@@ -133,8 +125,8 @@ public class UTilitiesActivity extends TabActivity {
             	}
             }
             
-    });
-        final ImageButton balancebutton = (ImageButton) findViewById(R.id.balance_button);
+    });*/
+   /*     final ImageButton balancebutton = (ImageButton) findViewById(R.id.balance_button);
         balancebutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	if(!ConnectionHelper.cookieHasBeenSet()) /*&& 
@@ -152,8 +144,8 @@ public class UTilitiesActivity extends TabActivity {
             		}
             }
             
-    });
-        final ImageButton mapbutton = (ImageButton) findViewById(R.id.map_button);
+    });*/
+  /*      final ImageButton mapbutton = (ImageButton) findViewById(R.id.map_button);
         mapbutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
@@ -163,7 +155,7 @@ public class UTilitiesActivity extends TabActivity {
             		
             }
             
-    });
+    });*/
         final ImageButton databutton = (ImageButton) findViewById(R.id.data_button);
         databutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -179,7 +171,7 @@ public class UTilitiesActivity extends TabActivity {
             		
             }
             
-    });*/
+    });
  /*       final ImageButton examsbutton = (ImageButton) findViewById(R.id.exams_button);
         examsbutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

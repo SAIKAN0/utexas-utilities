@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ public class Preferences extends PreferenceActivity {
 	boolean set;
 	boolean pnalogindone, logindone;
 	Toast toast;
+	ProgressDialog pd;
 	SharedPreferences settings;
 	Preference loginfield, loginButton;
     Preference passwordfield;
@@ -45,7 +47,8 @@ public class Preferences extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+        
         settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
        edit = settings.edit();
        toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
@@ -141,9 +144,11 @@ public class Preferences extends PreferenceActivity {
     		 
     		 if(preference.getTitle().equals("Login"))
     		 {
-    			 toast.setText("Logging in...");
+    			 
+    			 pd = ProgressDialog.show(Preferences.this, "", "Logging in...");
+    		/*	 toast.setText("Logging in...");
     			 toast.setDuration(Toast.LENGTH_LONG);
-    			 toast.show();
+    			 toast.show();*/
  
     			 ConnectionHelper ch = new ConnectionHelper(Preferences.this);
     			 DefaultHttpClient httpclient = ConnectionHelper.getThreadSafeClient();
@@ -261,6 +266,8 @@ public class Preferences extends PreferenceActivity {
     		switch(progress[0])
 			{
     		case 1:
+    			if(pd.isShowing())
+	    			pd.dismiss();
     		Toast.makeText(Preferences.this, "There was an error while connecting to UTDirect, please check your internet connection and try again", Toast.LENGTH_LONG).show();
 				
 				break;
@@ -285,6 +292,8 @@ public class Preferences extends PreferenceActivity {
 					
 					edit.putBoolean("loggedin", true);
 					edit.commit();
+					if(pd.isShowing())
+		    			pd.dismiss();
 				 }
 			}
 		}
@@ -313,6 +322,8 @@ public class Preferences extends PreferenceActivity {
     		switch(progress[0])
 			{
     		case 1:
+    			if(pd.isShowing())
+	    			pd.dismiss();
     		Toast.makeText(Preferences.this, "There was an error while connecting to UT PNA, please check your internet connection and try again", Toast.LENGTH_LONG).show();
 				
 				break;
@@ -344,6 +355,9 @@ public class Preferences extends PreferenceActivity {
 					
 					edit.putBoolean("loggedin", true);
 					edit.commit();
+					if(pd.isShowing())
+		    			pd.dismiss();
+					
 				 }
 			}
 		}
