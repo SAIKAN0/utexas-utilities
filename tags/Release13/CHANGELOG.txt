@@ -1,0 +1,100 @@
+CHANGELOG (started this a bit late, oh well)
+
+Versioncode 6, Version 1.05
+
+Most likely added the ability to view Data Usage
+Fixed an issue causing certain transactions to show inconsistent dates
+Transaction view always reloads upon viewing as opposed to showing a cached version until being manually reloaded
+Changed how bus schedules are displayed to prevent "stacking" of toasts
+Bus schedule requests are threaded now, should prevent hanging while waiting to query for the times
+Ability to view exam schedule  (removed for now as it serves no real purpose)
+	long press item to see where it is on the map
+	
+Fixed a bug where you can only see a blank schedule when logged in through UTDirect
+Fixed a bug causing a force close after logging in through UTDirect
+Reworked the login system to produce less lag when loading parts of the app
+Course schedule now has a slightly configurable background
+Preferences moved around a bit to reflect new features
+
+Okay, at this point it might as well be a 1.5/2.0 release.
+ActionBar added along with all accompanying shiny features.
+
+Versioncode 2 - 1.51
+
+Changed preferences to make the functions of some of them more clear.
+Button added to map to return to user's current location.
+Preference added to choose where to center map upon initial load.
+Times of operation added to dining menus.
+
+Versioncode 3 - 1.6
+
+Fixed bug with Login button state when no internet connectivity is present
+Fixed bug causing a crash when no Location services are enabled
+Home button UI changed to better reflect its function
+Blackboard support!
+
+Versioncode 4 - 1.61
+
+Some small UI changes
+Can now load last 6 months of transactions (not just the last 20)
+All devices can now download attachments.
+Grade comments are now viewable.
+Crash reports will automatically be sent in the background to make it easier to diagnose problems.
+Minor bug fixes.
+Some small UI changes.
+
+Versioncode 5 - 1.62
+
+Fixed nullPointer bug when jsoup throws an exception
+Fixed bug causing a crash when students with summer exams went to view them
+
+Versioncode 6 - 1.63
+
+Hopefully fixed a strange crash in menus
+Hopefully fixed a crash related to canceling login
+Fixed a bug causing a crash during logout (this might break some stuff, we'll see)
+Fixed a bug that could cause a crash in the campus map
+Removed some leftover layout files that could have caused issues with orientation lockers that put the app into landscape mode
+Blackboard is now much more accepting of unexpected data; an option has also been added if Blackboard still crashes because of malformed data
+Text in the Blackboard detailed grade view now wraps correctly
+Made the entire app much more robust when an inconsistent internet connection is present.
+Features are now more responsive when errors occur instead of just closing or crashing.
+
+Versioncode 7 - 1.64/1.7
+
+Fixed crash when backing out of menus while they were still loading
+One more blackboard crash fix - the option to view raw data is probably obsolete at this point
+Locate exam button now hidden when there is no location available for an exam
+Password is encrypted
+New buildings added to database for campus map.
+Temporary login overhauled, now works with all services.
+Slight tweak to list header layout.
+Bus stop times now get fetched correctly.
+
+Versioncode 8 - 1.65
+
+Fixed crash when viewing Carothers Dormitory on map
+Removed 40 Acres Bakery from Menus, and changed the hours for a few locations to match their updated hours which can be found at http://www.utexas.edu/student/housing/index.php?site=18&scode=0&id=2222 
+
+Versioncode 9 - 1.66
+
+Fixed crash in Data Usage
+Fixed crash in Temp Login
+Updated bus time parsing
+
+Versioncode 10 - 1.7
+
+Enabled move to SD card
+Rotation enabled
+View multiple schedules
+Fixed crash in data usage
+Added CLA to building db
+
+Versioncode 11 - 1.71
+
+Hardware acceleration turned back on SMOOTH SCROLLING AWWW YEAAAHH
+GPS Searching now stops when the Campus Map is not in view
+Rewrote regex for transactions
+Exam schedule class names now truncate instead of going to multiple lines
+Reverted dashboard buttons
+
