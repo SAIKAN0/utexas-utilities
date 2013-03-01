@@ -22,10 +22,7 @@ public class BBClass {
 		//year (2 digits) followed by semester (in caps) followed by name followed by unique (digits in parentheses)
 	//	if(courseid.matches("^\\d\\d[A-Z]{1,2} .*?(\\d+?)$"))
 	//		Log.d("BBClass check", "Class format is good");
-		
 
-		
-		
 		if(!fullcourseid.matches("^\\d{4}_[a-z]+?_\\d{5}_[A-Za-z]+?_\\w+$"))
 			Log.d("BBClass check", "Course ID malformed: " + fullcourseid);
 		if(!name.matches("^\\d{2}[A-Z]{1,2} .*?\\(\\d+?\\)$"))
@@ -37,9 +34,17 @@ public class BBClass {
 //																? name.substring(name.indexOf(" ")+1,name.indexOf("(")-1)
 	//															: name.substring(name.indexOf(" ")+1);
 		
-		//If we've got a date in the front (probably) chop it off
-		if(name.substring(0, name.indexOf(" ")).matches("^\\d{2}[A-Z]{1,2}$"))
-			this.name = name.substring(name.indexOf(" ")+1);
+		
+		//Check if the name has spaces, apparently they don't always have them
+		if(name.indexOf(" ") >= 0)
+		{	
+			//TODO: might try this with a split[0] rather than the substring
+			//If we've got a date in the front (probably) chop it off
+			if(name.substring(0, name.indexOf(" ")).matches("^\\d{2}[A-Z]{1,2}$"))
+				this.name = name.substring(name.indexOf(" ")+1);
+			else
+				this.name = name;
+		}
 		else
 			this.name = name;
 		
