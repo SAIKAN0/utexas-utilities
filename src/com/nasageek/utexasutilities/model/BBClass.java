@@ -2,13 +2,9 @@ package com.nasageek.utexasutilities.model;
 
 import java.util.Locale;
 
-import java.util.Locale;
-
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
-public class BBClass implements Parcelable {
+public class BBClass {
 
 	private String name;
 	private String bbid;
@@ -20,34 +16,9 @@ public class BBClass implements Parcelable {
 	
 	private boolean courseIdAvailable, fullCourseIdTooShort;
 
-	public static Parcelable.Creator<BBClass> CREATOR = new Parcelable.Creator<BBClass>(){
-
-		@Override
-		public BBClass createFromParcel(Parcel source) {
-			return new BBClass(source);
-		}
-
-		@Override
-		public BBClass[] newArray(int size) {
-			return new BBClass[size];
-		}	
-	};
-	
-	public BBClass(Parcel in) {
-		name = in.readString();
-		bbid = in.readString();
-		fullcourseid = in.readString();
-		semester = in.readString();
-		unique = in.readString();
-		courseid = in.readString();
-		boolean[] temp = new boolean[2];
-		in.readBooleanArray(temp);
-		courseIdAvailable = temp[0];
-		fullCourseIdTooShort = temp[1];				
-	}
-	
 	//TODO: move auto-formatting into a separate method? 
-	public BBClass(String name, String bbid, String fullcourseid) {
+	public BBClass(String name, String bbid, String fullcourseid)
+	{
 		//name is now blank, and the Course ID is mysteriously absent :( - all as of 8/29/2012  
 		//oh ho ho! It was fixed, how wonderful. Ignore commented stuff below
 		//checks to see if it is what is now a legitimate courseid 
@@ -98,83 +69,89 @@ public class BBClass implements Parcelable {
 		this.fullName = name;
 		this.fullcourseid = fullcourseid;
 		//some courseid's are malformed (ex. 00002), can't pull semester out of that unfortunately
-		try {
+		try
+		{
 			//pulls the first section and second section of courseid, capitalizes the first letter of the semester
 			this.semester = fullcourseid.split("_")[0]+" "+(fullcourseid.split("_")[1].charAt(0)+"").toUpperCase(Locale.US)+fullcourseid.split("_")[1].substring(1);	
-		} catch(Exception ex) {
+		}
+		catch(Exception ex)
+		{
 			ex.printStackTrace();
 			this.semester = "Unknown";
 		}
 		
-		if(fullcourseid.split("_").length>=3) {	
+		if(fullcourseid.split("_").length>=3)	
+		{	
 			fullCourseIdTooShort = false;
 			this.unique = fullcourseid.split("_")[2];
 			//assumes Course ID is directly after unique_ and is at the end of the string
 			//will fail if unique start is less than 6 characters from the end of the string.
-			try { 
+			try
+			{ 
 				courseid = fullcourseid.substring(fullcourseid.indexOf(unique)+6).replaceAll("_"," ");
 				
 				courseIdAvailable = true;
-			} catch(Exception ex) {
+			}
+			catch(Exception ex)
+			{
 				courseIdAvailable = false;
 			}
 		}
 		else
 			fullCourseIdTooShort = true;
+		
+		
 	}
-	public boolean isFullCourseIdTooShort() {
+	public boolean isFullCourseIdTooShort()
+	{
 		return fullCourseIdTooShort;
 	}
-	public boolean isCourseIdAvailable() {
+	public boolean isCourseIdAvailable()
+	{
 		return courseIdAvailable;
 	}
-	public String getCourseId() {
+	public String getCourseId()
+	{
 		return courseid;
 	}
-	public String getUnique() {
+	public String getUnique()
+	{
 		return unique;
 	}
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
-	public String getBbid() {
+	public String getBbid()
+	{
 		return bbid;
 	}
-	public void setBbid(String bbid) {
+	public void setBbid(String bbid) 
+	{
 		this.bbid = bbid;
 	}
-	public String getFullCourseid() {
+	public String getFullCourseid() 
+	{
 		return fullcourseid;
 	}
-	public void setFullCourseid(String fullcourseid) {
+	public void setFullCourseid(String fullcourseid) 
+	{
 		this.fullcourseid = fullcourseid;
 	}
-	public String getSemester()  {
+	public String getSemester() 
+	{
 		return semester;
 	}
-	public void setSemester(String semester) {
+	public void setSemester(String semester)
+	{
 		this.semester = semester;
 	}
-	public String getFullName() {
+	public String getFullName()
+	{
 		return fullName;
-	}
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-
-		dest.writeString(name);
-		dest.writeString(bbid);
-		dest.writeString(fullcourseid);
-		dest.writeString(semester);
-		dest.writeString(unique);
-		dest.writeString(courseid);
-		dest.writeBooleanArray(new boolean[] {courseIdAvailable, fullCourseIdTooShort});
-
 	}
 }

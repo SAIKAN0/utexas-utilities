@@ -1,7 +1,6 @@
 package com.nasageek.utexasutilities.adapters;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
@@ -11,18 +10,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.foound.widget.AmazingAdapter;
-import com.nasageek.utexasutilities.ParcelablePair;
+import com.nasageek.utexasutilities.Pair;
 import com.nasageek.utexasutilities.R;
 import com.nasageek.utexasutilities.model.BBClass;
 
-public class BBClassAdapter extends AmazingAdapter {
+public class BBClassAdapter extends AmazingAdapter
+{
 	private Context con;
 	private ArrayList<BBClass> classes;
-	private List<ParcelablePair<String, List<BBClass>>> all;
+	private ArrayList<Pair<String,ArrayList<BBClass>>> all;
 	private LayoutInflater li;
 	private Boolean longform;
 	
-	public BBClassAdapter(Context con, List<ParcelablePair<String, List<BBClass>>> objects) {
+	public BBClassAdapter(Context con, ArrayList<Pair<String,ArrayList<BBClass>>> objects)
+	{
 		all = objects;
 		li = (LayoutInflater)con.getSystemService(Context.LAYOUT_INFLATER_SERVICE);	
 		longform = PreferenceManager.getDefaultSharedPreferences(con).getBoolean("blackboard_class_longform", false);

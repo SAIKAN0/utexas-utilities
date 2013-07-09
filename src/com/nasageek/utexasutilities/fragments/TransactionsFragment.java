@@ -16,7 +16,7 @@ import org.apache.http.util.EntityUtils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.TypedArray;
-import com.nasageek.utexasutilities.AsyncTask;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -41,7 +41,8 @@ import com.nasageek.utexasutilities.model.Transaction;
 
 //TODO: last transaction doesn't show when loading dialog is present at the bottom, low priority fix
 
-public class TransactionsFragment extends SherlockFragment {
+public class TransactionsFragment extends SherlockFragment
+{
 	private DefaultHttpClient httpclient;
 	private LinearLayout t_pb_ll;
 	private AmazingListView tlv;
@@ -55,17 +56,19 @@ public class TransactionsFragment extends SherlockFragment {
 
 	private View vg;
 	
-	private String balance;
+	private String balance = "";
 	private fetchTransactionDataTask fetch;
 	
-	public enum TransactionType {
+	public enum TransactionType
+	{
 		Bevo, Dinein;
 	}
 	private TransactionType mType;
 	
 	public TransactionsFragment() { }
 	
-	public static TransactionsFragment newInstance(String title, TransactionType type) {
+	public static TransactionsFragment newInstance(String title, TransactionType type)
+	{
 		TransactionsFragment f = new TransactionsFragment();
 
         Bundle args = new Bundle();
@@ -77,14 +80,15 @@ public class TransactionsFragment extends SherlockFragment {
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
 		vg =  inflater.inflate(R.layout.transactions_fragment_layout, container, false);
 		
-		tlv              = (AmazingListView) vg.findViewById(R.id.transactions_listview);
-		t_pb_ll          = (LinearLayout) vg.findViewById(R.id.trans_progressbar_ll);
-		etv              = (TextView) vg.findViewById(R.id.trans_error);
+		tlv = (AmazingListView) vg.findViewById(R.id.transactions_listview);
+		t_pb_ll = (LinearLayout) vg.findViewById(R.id.trans_progressbar_ll);
+		etv = (TextView) vg.findViewById(R.id.trans_error);
 		balanceLabelView = (TextView) vg.findViewById(R.id.balance_label_tv);
-		balanceView      = (TextView) vg.findViewById(R.id.balance_tv);
+		balanceView = (TextView) vg.findViewById(R.id.balance_tv);
 		
 /*		if(TransactionType.Bevo.equals(mType))
 			balanceLabelView.setText("Bevo Bucks ");
@@ -103,43 +107,52 @@ public class TransactionsFragment extends SherlockFragment {
 
 	}
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-
+		
+	//	parentAct = this.getSherlockActivity();
+		
 		postdata = new ArrayList<BasicNameValuePair>();
+		
+		//for now we're going to assume having arguments means we're using the pager
+		if(getArguments() != null) {
+			mType = (TransactionType) getArguments().getSerializable("type");
+		}
+		setRetainInstance(true);
 		
 		if(TransactionType.Bevo.equals(mType))
 			postdata.add(new BasicNameValuePair("sRequestSw","B"));
 		else if(TransactionType.Dinein.equals(mType))
 			postdata.add(new BasicNameValuePair("rRequestSw","B"));
 		
-		if(savedInstanceState == null) {
+		if(savedInstanceState == null)
 			transactionlist = new ArrayList<Transaction>();
-			balance = "";
-		}
-		else {
+		else
 			transactionlist = savedInstanceState.getParcelableArrayList("transactions");
-			//someone was crashing with a null transactionlist, shouldn't be happening
-			//but this should fix it regardless
-			if(transactionlist == null)
-				transactionlist = new ArrayList<Transaction>();
-			balance = savedInstanceState.getString("balance");
-		}
 		
 		ta = new TransactionAdapter(getSherlockActivity(), this, transactionlist);
 
 	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle out) {
-		super.onSaveInstanceState(out);
-		out.putParcelableArrayList("transactions", transactionlist);
-		out.putString("balance", balance);
-	}
-	
+/*	@Override 
+	public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(activity, attrs, savedInstanceState);
+
+        TypedArray a = activity.obtainStyledAttributes(attrs, R.styleable.TransactionsFragment);
+        
+        //setting the title isn't really necessary because title is not used when inflating from xml
+  //     Bundle args = new Bundle();
+  //      args.putString("title", a.getText(R.styleable.TransactionsFragment_label).toString());
+  //      setArguments(args);
+        
+        mType = a.getInt(R.styleable.TransactionsFragment_transactionsType, 0) == 1 
+        										? TransactionType.Dinein
+        										: TransactionType.Bevo;
+        a.recycle();
+    }*/
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public void parser(boolean refresh) {
+	public void parser(boolean refresh)
+	{
 		httpclient = ConnectionHelper.getThreadSafeClient();
 		httpclient.getCookieStore().clear();
 		
@@ -162,7 +175,8 @@ public class TransactionsFragment extends SherlockFragment {
 		if(fetch!=null)
 			fetch.cancel(true);
 	}
-	public void refresh() {
+	public void refresh()
+	{
 	//	tlv.setVisibility(View.GONE);
 	//	etv.setVisibility(View.GONE);
 	//	t_pb_ll.setVisibility(View.VISIBLE);
@@ -183,18 +197,21 @@ public class TransactionsFragment extends SherlockFragment {
 		ta.resetPage();
 		tlv.setSelectionFromTop(0, 0);
 	}
-	private class fetchTransactionDataTask extends AsyncTask<Object,Void,Character> {
+	private class fetchTransactionDataTask extends AsyncTask<Object,Void,Character>
+	{
 		private DefaultHttpClient client;
 		private boolean refresh;
 		private String errorMsg;
 		private ArrayList<Transaction> tempTransactionList;
 		
-		public fetchTransactionDataTask(DefaultHttpClient client, boolean refresh) {
+		public fetchTransactionDataTask(DefaultHttpClient client, boolean refresh)
+		{
 			this.client = client;
 			this.refresh = refresh;
 		}
 		@Override
-		protected void onPreExecute() {
+		protected void onPreExecute()
+		{
 			//only show the loading view if we're loading the first page of transactions or refreshing
 			if(ta.page == 1 || refresh)
 			{
@@ -206,11 +223,13 @@ public class TransactionsFragment extends SherlockFragment {
 			}
 		}
 		@Override
-		protected Character doInBackground(Object... params) {
+		protected Character doInBackground(Object... params)
+		{
 			HttpPost hpost = new HttpPost("https://utdirect.utexas.edu/hfis/transactions.WBX");
 	    	String pagedata="";
 	    	tempTransactionList = new ArrayList<Transaction>();
-	    	try {
+	    	try
+			{
 				hpost.setEntity(new UrlEncodedFormEntity(postdata));
 				HttpResponse response = client.execute(hpost);
 		    	pagedata = EntityUtils.toString(response.getEntity());
@@ -221,8 +240,8 @@ public class TransactionsFragment extends SherlockFragment {
 				cancel(true);
 				return null;
 			}
-	    	//TODO: automatically log them back in
-	    	if(pagedata.contains("<title>Information Technology Services - UT EID Logon</title>")) {
+	    	if(pagedata.contains("<title>Information Technology Services - UT EID Logon</title>"))
+	    	{
 				errorMsg = "You've been logged out of UTDirect, back out and log in again.";
 				ConnectionHelper.logout(getSherlockActivity());
 				cancel(true);
@@ -241,22 +260,25 @@ public class TransactionsFragment extends SherlockFragment {
 	    	Pattern balancePattern = Pattern.compile("\"right\">\\s*(.*)</td>\\s*</tr");
 	    	Matcher balanceMatcher = balancePattern.matcher(pagedata);
 	    	
-	    	if(balanceMatcher.find() && ta.page == 1) {
+	    	if(balanceMatcher.find() && ta.page == 1)
+	    	{
 	    		balance = balanceMatcher.group(1);	
 	    	}
-	    	while(reasonMatcher.find() && costMatcher.find() && dateMatcher.find() && !this.isCancelled()) {
+	    	while(reasonMatcher.find() && costMatcher.find() && dateMatcher.find() && !this.isCancelled())
+	    	{
 	    		Transaction tran = new Transaction(reasonMatcher.group(1).trim(), costMatcher.group(1).replaceAll("\\s",""), dateMatcher.group(1));
 	    		tempTransactionList.add(tran);
 	    	}
-	    	//check for additional pages
-	    	if(pagedata.contains("<form name=\"next\"") && !this.isCancelled()) {
+	    	if(pagedata.contains("<form name=\"next\"") && !this.isCancelled()) //check for additional pages
+	    	{
 	    		Pattern namePattern = Pattern.compile("sNameFL\".*?value=\"(.*?)\"");
 	    		Matcher nameMatcher = namePattern.matcher(pagedata);
 	    		Pattern nextTransPattern = Pattern.compile("nexttransid\".*?value=\"(.*?)\"");
 	    		Matcher nextTransMatcher = nextTransPattern.matcher(pagedata);
 	    		Pattern dateTimePattern = Pattern.compile("sStartDateTime\".*?value=\"(.*?)\"");
 	    		Matcher dateTimeMatcher = dateTimePattern.matcher(pagedata);
-	    		if(nameMatcher.find() && nextTransMatcher.find() && dateTimeMatcher.find() && !this.isCancelled()) {	
+	    		if(nameMatcher.find() && nextTransMatcher.find() && dateTimeMatcher.find() && !this.isCancelled())
+	    		{	
 	    			postdata.clear();
 			    	postdata.add(new BasicNameValuePair("sNameFL",nameMatcher.group(1)));
 			    	postdata.add(new BasicNameValuePair("nexttransid",nextTransMatcher.group(1)));
@@ -284,7 +306,9 @@ public class TransactionsFragment extends SherlockFragment {
 		    	View v = tlv.getChildAt(0);
 		    	int top = (v == null) ? 0 : v.getTop();
 	    		if(result == 'm')
+	    		{
 	    			ta.notifyMayHaveMorePages();
+	    		}
 	    		if(result == 'n')
 	    			ta.notifyNoMorePages();
 	    		if(!refresh)
@@ -292,18 +316,23 @@ public class TransactionsFragment extends SherlockFragment {
 	    		else
 	    			tlv.setSelection(0);
 
+	    		
+				
 	    		balanceView.setText(balance);
 	    		
 	    		t_pb_ll.setVisibility(View.GONE);
 	    		etv.setVisibility(View.GONE);
 				tlv.setVisibility(View.VISIBLE);
 				balanceLabelView.setVisibility(View.VISIBLE);
-				balanceView.setVisibility(View.VISIBLE);	
+				balanceView.setVisibility(View.VISIBLE);
+	    		
 	    	} 	
 		}
 		@Override
-		protected void onCancelled(Character nullIfError){
-			if(nullIfError == null){
+		protected void onCancelled(Character nullIfError)
+		{
+			if(nullIfError == null)
+			{
 				if(ta.page == 1) //if the first page fails just hide everything
 				{	
 					//etv off center, not sure if worth hiding the balance stuff to get it centered
@@ -316,8 +345,6 @@ public class TransactionsFragment extends SherlockFragment {
 				}
 				else //on later pages we should let them see what's already loaded
 				{
-					//got an NPE here, seems like a race condition where cancel is called externally, and for some
-					//reason null is returned (shouldn't be the case) not worth looking into right now
 					Toast.makeText(getSherlockActivity(), errorMsg, Toast.LENGTH_SHORT).show();
 					ta.notifyNoMorePages();
 					ta.notifyDataSetChanged();

@@ -148,3 +148,8 @@ Tweaked sizes of lots of list items to make them a bit more "touchable"
 Blackboard notification dashboard added
 Lots of tweaking
 
+1.91
+-Fixed crash for some users viewing Blackboard
+
+1.92
+-Fixed crash for some users with early classes

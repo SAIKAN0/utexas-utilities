@@ -8,8 +8,7 @@
 
     <include
         android:id="@+id/dash_progressbar_ll"
-        layout="@layout/loading_content_layout"
-        android:visibility="gone" />
+        layout="@layout/loading_content_layout" />
 
     <include
         android:id="@+id/dash_error"
@@ -23,5 +22,6 @@
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
-        android:clickable="true" />
+        android:clickable="true"
+        android:visibility="gone" />
 </LinearLayout>

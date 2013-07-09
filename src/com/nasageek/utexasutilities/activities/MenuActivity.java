@@ -31,7 +31,7 @@ import com.nasageek.utexasutilities.adapters.MyFragmentPagerAdapter;
 import com.nasageek.utexasutilities.fragments.MenuFragment;
 import com.nasageek.utexasutilities.fragments.TransactionsFragment;
 import com.nasageek.utexasutilities.fragments.TransactionsFragment.TransactionType;
-import com.viewpagerindicator.MyTabPageIndicator;
+import com.viewpagerindicator.TabPageIndicator;
 
 public class MenuActivity extends SherlockFragmentActivity {
 	
@@ -92,7 +92,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 	private int previousItem;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu_layout);
 		
@@ -103,7 +104,8 @@ public class MenuActivity extends SherlockFragmentActivity {
 		actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		actionbar.setHomeButtonEnabled(true);
 		actionbar.setDisplayHomeAsUpEnabled(true);
-			
+		
+		
         final Spinner spinner = new Spinner(this);
         spinner.setPromptId(R.string.restaurantprompt);
 		final ArrayAdapter<CharSequence> adapter = new ArrayAdapter(actionbar.getThemedContext(), android.R.layout.simple_spinner_item, Restaurant.values());
@@ -116,36 +118,37 @@ public class MenuActivity extends SherlockFragmentActivity {
         	previousItem = 0;
         initialisePaging(((Restaurant)spinner.getAdapter().getItem(previousItem)).code+"");	
         
-        actionbar.setListNavigationCallbacks(adapter, new OnNavigationListener() {
+        actionbar.setListNavigationCallbacks(adapter, new OnNavigationListener() 
+        {
         	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
         		Restaurant r = (Restaurant)spinner.getAdapter().getItem(itemPosition);
         		
         		String restId = r.getCode();
-         		
-        		if(!"0".equals(restId)) {	         			
-        			String[] times = ((Restaurant)spinner.getAdapter().getItem(itemPosition)).getTimes();
-        			if(!r.allDay) {
-        				((TextView)findViewById(R.id.breakfast_times)).setText(times[0]);
-        				((TextView)findViewById(R.id.lunch_times)).setText(times[1]);
-        				((TextView)findViewById(R.id.dinner_times)).setText(times[2]);
-        			}
-        			else {
-        				((TextView)findViewById(R.id.breakfast_times)).setText("");
-        				((TextView)findViewById(R.id.lunch_times)).setText(times[0]);
-        				((TextView)findViewById(R.id.dinner_times)).setText("");
-        			}
-       
-        			if(itemPosition != previousItem) {
-        				
-	        			((MenuFragment)mPagerAdapter.getItem(0)).updateView(restId, true);
-	         			((MenuFragment)mPagerAdapter.getItem(1)).updateView(restId, true);
-	         			((MenuFragment)mPagerAdapter.getItem(2)).updateView(restId, true);
+         		if(!"0".equals(restId) && itemPosition != previousItem)
+         		{	
+         			String[] times = ((Restaurant)spinner.getAdapter().getItem(itemPosition)).getTimes();
+         			
+         			if(!r.allDay)
+         			{
+	         			((TextView)findViewById(R.id.breakfast_times)).setText(times[0]);
+	         			((TextView)findViewById(R.id.lunch_times)).setText(times[1]);
+	         			((TextView)findViewById(R.id.dinner_times)).setText(times[2]);
+         			}
+         			else
+         			{
+         				((TextView)findViewById(R.id.breakfast_times)).setText("");
+	         			((TextView)findViewById(R.id.lunch_times)).setText(times[0]);
+	         			((TextView)findViewById(R.id.dinner_times)).setText("");
+         			}
+         			
+         			((MenuFragment)mPagerAdapter.getItem(0)).updateView(restId, true);
+         			((MenuFragment)mPagerAdapter.getItem(1)).updateView(restId, true);
+         			((MenuFragment)mPagerAdapter.getItem(2)).updateView(restId, true);
          			
          			previousItem = -1;
-        			}
-         		}
-        		
+
+         		}	
         		return true;
         	}
         });
@@ -160,11 +163,6 @@ public class MenuActivity extends SherlockFragmentActivity {
         List<SherlockFragment> fragments = new Vector<SherlockFragment>();
         pager = (ViewPager)findViewById(R.id.viewpager);
         
-        /**
-         * this is a bit of a hacky solution for something that should be handled by default.
-         * on a rotate, pager caches the old fragments (with setRetainInstance(true)), but the 
-         * adapter does not, so I have to add the old fragments back to the adapter manually
-        */
         if(getSupportFragmentManager().findFragmentByTag(Utility.makeFragmentName(pager.getId(), 0)) != null) {
         	
         	fragments.add((SherlockFragment)getSupportFragmentManager().findFragmentByTag(Utility.makeFragmentName(pager.getId(), 0)));
@@ -177,7 +175,7 @@ public class MenuActivity extends SherlockFragmentActivity {
             fragments.add(MenuFragment.newInstance("Dinner", restId));
         }
         
-        final MyTabPageIndicator tabIndicator = (MyTabPageIndicator)findViewById(R.id.titles);
+        final TabPageIndicator tabIndicator = (TabPageIndicator)findViewById(R.id.titles);
         
         mPagerAdapter = new MultiPanePagerAdapter(getSupportFragmentManager(), fragments);
         mPagerAdapter.setPagesDisplayed(getResources().getInteger(R.integer.menu_num_visible_pages));
@@ -191,12 +189,14 @@ public class MenuActivity extends SherlockFragmentActivity {
 		pager.setOffscreenPageLimit(2);
     }
 	@Override
-	public void onSaveInstanceState(Bundle out) {
+	public void onSaveInstanceState(Bundle out)
+	{
 		super.onSaveInstanceState(out);
 		out.putInt("spinner_selection", actionbar.getSelectedNavigationIndex());
 	}
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
     	int id = item.getItemId();
     	switch(id)
     	{

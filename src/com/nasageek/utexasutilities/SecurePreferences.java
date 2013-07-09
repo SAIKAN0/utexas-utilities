@@ -45,8 +45,6 @@ public class SecurePreferences {
 
 	public static class SecurePreferencesException extends RuntimeException {
 
-		private static final long serialVersionUID = 1L;
-
 		public SecurePreferencesException(Throwable e) {
 			super(e);
 		}
@@ -75,7 +73,7 @@ public class SecurePreferences {
 	 * the plaintext value of the value which can be used to decipher the value.
 	 * @throws SecurePreferencesException
 	 */
-	public SecurePreferences(Context context, String preferenceName, boolean encryptKeys) throws SecurePreferencesException {
+	public SecurePreferences(Context context, String preferenceName, String secureKey, boolean encryptKeys) throws SecurePreferencesException {
 		try {
 			this.writer = Cipher.getInstance(TRANSFORMATION);
 			this.reader = Cipher.getInstance(TRANSFORMATION);

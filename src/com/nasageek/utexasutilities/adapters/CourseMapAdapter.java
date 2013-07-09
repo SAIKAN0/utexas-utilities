@@ -10,17 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nasageek.utexasutilities.ParcelablePair;
+import com.nasageek.utexasutilities.Pair;
 import com.nasageek.utexasutilities.R;
 import com.nasageek.utexasutilities.model.CourseMapItem;
 
-public class CourseMapAdapter extends ArrayAdapter<ParcelablePair<CourseMapItem,ArrayList>> {
+public class CourseMapAdapter extends ArrayAdapter<Pair<CourseMapItem,ArrayList>> {
 
 	private Context con;
-	private ArrayList<ParcelablePair<CourseMapItem,ArrayList>> items;
+	private ArrayList<Pair<CourseMapItem,ArrayList>> items;
 	private LayoutInflater li;
 	
-	public CourseMapAdapter(Context c, ArrayList<ParcelablePair<CourseMapItem,ArrayList>> items)
+	public CourseMapAdapter(Context c, ArrayList<Pair<CourseMapItem,ArrayList>> items)
 	{
 		super(c,0,items);
 		con = c;
@@ -33,7 +33,7 @@ public class CourseMapAdapter extends ArrayAdapter<ParcelablePair<CourseMapItem,
 		return items.size();
 	}
 
-	public ParcelablePair getItem(int position) {
+	public Pair getItem(int position) {
 		
 		return items.get(position);
 	}
@@ -56,7 +56,7 @@ public class CourseMapAdapter extends ArrayAdapter<ParcelablePair<CourseMapItem,
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		Boolean isFolder = true;
-		ParcelablePair<CourseMapItem, ArrayList> item = items.get(position);
+		Pair<CourseMapItem, ArrayList> item = items.get(position);
 		
 		String title = item.first.getName();
 		if(item.second.size()==0)

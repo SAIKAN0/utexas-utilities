@@ -18,7 +18,7 @@ import org.apache.http.protocol.HTTP;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import com.nasageek.utexasutilities.AsyncTask;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -57,9 +57,10 @@ public class ConnectionHelper {
 	    
 	    return client;
 	}
-	public boolean bbLogin(Context con, DefaultHttpClient client) {
+	public boolean bbLogin(Context con, DefaultHttpClient client)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
-		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password",false);
+		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password","lalalawhatanicekey",false);
 		HttpPost httppost = new HttpPost("https://courses.utexas.edu/webapps/login/");
 		try {
 		       
@@ -84,9 +85,10 @@ public class ConnectionHelper {
 		   bbLoggedIn = true; 
 		   return true;
 	}
-	public boolean Login(Context con, DefaultHttpClient client) {
+	public boolean Login(Context con, DefaultHttpClient client)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
-		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password",false);
+		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password","lalalawhatanicekey",false);
 		HttpPost httppost = new HttpPost("https://utdirect.utexas.edu/security-443/logon_check.logonform");
 		try {
 		       
@@ -111,9 +113,10 @@ public class ConnectionHelper {
 		   return true;
 		
 	}
-	public boolean PNALogin(Context con, DefaultHttpClient client) {
+	public boolean PNALogin(Context con, DefaultHttpClient client)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
-		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password",false);
+		sp = new SecurePreferences(con, "com.nasageek.utexasutilities.password","lalalawhatanicekey",false);
 		HttpPost httppost = new HttpPost("https://management.pna.utexas.edu/server/graph.cgi");
 		try {
 		       
@@ -138,7 +141,8 @@ public class ConnectionHelper {
 		   PNALoggedIn = true; 
 		   return true;
 	}
-	public static void logout(Context con) {
+	public static void logout(Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Editor edit = settings.edit();
 		getThreadSafeClient().getCookieStore().clear();
@@ -150,21 +154,26 @@ public class ConnectionHelper {
 		Crittercism.leaveBreadcrumb("Logged out");
 		
 	}
-	public static boolean isLoggingIn() {
+	public static boolean isLoggingIn()
+	{
 		return loggingIn;
 	}
-	public static String getPNAAuthCookie(Context con, DefaultHttpClient client) {
+	public static String getPNAAuthCookie(Context con, DefaultHttpClient client)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		
-		if(PNACookieHasBeenSet) {
+		if(PNACookieHasBeenSet)
+		{
 			return PNAAuthCookie;
 		}
-		else if(settings.contains("pna_auth_cookie")) {
+		else if(settings.contains("pna_auth_cookie"))
+		{
 			PNACookieHasBeenSet = true;
 			PNAAuthCookie = settings.getString("pna_auth_cookie", "");
 			return PNAAuthCookie;
 		}
-		else {
+		else
+		{
 			List<Cookie> cooklist = client.getCookieStore().getCookies();
 		    	
 	    	for(int i = 0; i<cooklist.size(); i++)
@@ -185,18 +194,22 @@ public class ConnectionHelper {
 			return "";
 		}
 	}
-	public static String getAuthCookie(Context con, DefaultHttpClient client ) {
+	public static String getAuthCookie(Context con, DefaultHttpClient client )
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 	
-		if(cookieHasBeenSet) {
+		if(cookieHasBeenSet)
+		{
 			return authCookie;
 		}
-		else if(settings.contains("utd_auth_cookie")) {
+		else if(settings.contains("utd_auth_cookie"))
+		{
 			cookieHasBeenSet = true;
 			authCookie = settings.getString("utd_auth_cookie", "");
 			return authCookie;
 		}
-		else {
+		else
+		{
 			List<Cookie> cooklist = client.getCookieStore().getCookies();
 		    	
 		    	for(int i = 0; i<cooklist.size(); i++)
@@ -218,18 +231,22 @@ public class ConnectionHelper {
 				return "";
 		}
 	}
-	public static String getBBAuthCookie(Context con, DefaultHttpClient client ) {
+	public static String getBBAuthCookie(Context con, DefaultHttpClient client )
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		
-		if(bbCookieHasBeenSet) {
+		if(bbCookieHasBeenSet)
+		{
 			return bbAuthCookie;
 		}
-		else if(settings.contains("bb_auth_cookie")) {
+		else if(settings.contains("bb_auth_cookie"))
+		{
 			bbCookieHasBeenSet = true;
 			bbAuthCookie = settings.getString("bb_auth_cookie", "");
 			return bbAuthCookie;
 		}
-		else {
+		else
+		{
 			List<Cookie> cooklist = client.getCookieStore().getCookies();
 		    	
 	    	for(int i = 0; i<cooklist.size(); i++)
@@ -251,67 +268,79 @@ public class ConnectionHelper {
 			return "";
 		}
 	}
-	public static void resetCookie(Context con) {
+	public static void resetCookie(Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().remove("utd_auth_cookie"));
 		authCookie = "";
 		loggedIn = false;
 		cookieHasBeenSet = false;
 	}
-	public static void resetPNACookie(Context con) {
+	public static void resetPNACookie(Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().remove("pna_auth_cookie"));
 		PNAAuthCookie = "";
 		PNACookieHasBeenSet = false;
 		PNALoggedIn = false;
 	}
-	public static void resetBBCookie(Context con) {
+	public static void resetBBCookie(Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().remove("bb_auth_cookie"));
 		bbAuthCookie = "";
 		bbLoggedIn = false;
 		bbCookieHasBeenSet = false;
 	}
-	public static void resetCookies(Context con) {
+	public static void resetCookies(Context con)
+	{
 		resetCookie(con);
 		resetPNACookie(con);
 		resetBBCookie(con);
 	}
-	public static void setAuthCookie(String cookie, Context con) {
+	public static void setAuthCookie(String cookie, Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().putString("utd_auth_cookie", cookie));
 		authCookie = cookie;
 		cookieHasBeenSet = true;
 	}
-	public static void setPNAAuthCookie(String cookie, Context con) {
+	public static void setPNAAuthCookie(String cookie, Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().putString("pna_auth_cookie", cookie));
 		PNAAuthCookie = cookie;
 		PNACookieHasBeenSet = true;
 	}
-	public static void setBBAuthCookie(String cookie, Context con) {
+	public static void setBBAuthCookie(String cookie, Context con)
+	{
 		settings = PreferenceManager.getDefaultSharedPreferences(con);
 		Utility.commit(settings.edit().putString("bb_auth_cookie", cookie));
 		bbAuthCookie = cookie;
 		bbCookieHasBeenSet = true;
 	}
-	public static boolean cookieHasBeenSet() {
+	public static boolean cookieHasBeenSet()
+	{
 		return cookieHasBeenSet;
 	}
-	public static boolean PNACookieHasBeenSet() {
+	public static boolean PNACookieHasBeenSet()
+	{
 		return PNACookieHasBeenSet;
 	}
-	public static boolean bbCookieHasBeenSet() {
+	public static boolean bbCookieHasBeenSet()
+	{
 		return bbCookieHasBeenSet;
 	}
-	public class loginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask {	
+	public class loginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask
+	{	
 		DefaultHttpClient pnahttpclient;
 		DefaultHttpClient httpclient;
 		DefaultHttpClient bbhttpclient;
 		Editor edit;
 		Context context;
     	
-    	public loginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient) {
+    	public loginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient)
+		{
     		settings = PreferenceManager.getDefaultSharedPreferences(con);
     		edit = settings.edit();
     		this.httpclient = httpclient;
@@ -320,14 +349,16 @@ public class ConnectionHelper {
 			this.context = con;		
 		}
     	@Override
-    	protected Boolean doInBackground(Object... params) {
+    	protected Boolean doInBackground(Object... params)
+		{
 			loggingIn=true;
     		boolean loginStatus = ((ConnectionHelper)params[0]).Login(context, (DefaultHttpClient)httpclient);
 			publishProgress(loginStatus?0:1);
 			return loginStatus;		
 		}
     	@Override
-		protected void onProgressUpdate(Integer... progress) {
+		protected void onProgressUpdate(Integer... progress)
+		{
 			
     		switch(progress[0])
 			{
@@ -342,14 +373,17 @@ public class ConnectionHelper {
 			}
 		}
 		@Override
-		protected void onPostExecute(Boolean b) {
+		protected void onPostExecute(Boolean b)
+		{
 			logindone = b;
 			
-			if(logindone && pnalogindone && bbLoginDone && !isCancelled()) {
+			if(logindone && pnalogindone && bbLoginDone && !isCancelled())  
+			{
 				logindone = false;pnalogindone = false;bbLoginDone=false;
 				loggingIn=false;
 				
-				if(!ConnectionHelper.getAuthCookie(context, httpclient).equals("") && !ConnectionHelper.getPNAAuthCookie(context, pnahttpclient).equals("") && !ConnectionHelper.getBBAuthCookie(context, bbhttpclient).equals("")) {
+				if(!ConnectionHelper.getAuthCookie(context, httpclient).equals("") && !ConnectionHelper.getPNAAuthCookie(context, pnahttpclient).equals("") && !ConnectionHelper.getBBAuthCookie(context, bbhttpclient).equals(""))
+				{
 					Toast.makeText(context, "You're now logged in; feel free to access any of the app's features", Toast.LENGTH_LONG).show();
 					
 					edit.putBoolean("loggedin", true);
@@ -361,11 +395,13 @@ public class ConnectionHelper {
 				Crittercism.leaveBreadcrumb("Logged in (persistent)");
 			}
 		}
-		public void setContext(Context con) {
+		public void setContext(Context con)
+		{
 			context = con;
 		}
 		//baaaaaddd
-		private void cancelProgressBar() {
+		private void cancelProgressBar()
+		{
 			if(context.getClass().equals(UTilitiesActivity.class))
 				((SherlockActivity)context).setSupportProgressBarIndeterminateVisibility(false);
 			else if(context.getClass().equals(Preferences.class))
@@ -373,14 +409,16 @@ public class ConnectionHelper {
 		}
 		
 	}
-    public class PNALoginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask {   	
+    public class PNALoginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask
+	{   	
     	private DefaultHttpClient pnahttpclient;
 		private DefaultHttpClient httpclient;
 		private DefaultHttpClient bbhttpclient;
 		private Editor edit;
 		private Context context;
     	
-    	public PNALoginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient) {
+    	public PNALoginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient)
+		{
     		settings = PreferenceManager.getDefaultSharedPreferences(con);
     		edit = settings.edit();
     		this.httpclient = httpclient;
@@ -389,7 +427,8 @@ public class ConnectionHelper {
 			this.context = con;		
 		}
 		@Override
-		protected void onProgressUpdate(Integer... progress) {
+		protected void onProgressUpdate(Integer... progress)
+		{
     		switch(progress[0])
 			{
     			case 1:
@@ -402,14 +441,16 @@ public class ConnectionHelper {
     			case 0:break;
 			}
 		}	
-		protected Boolean doInBackground(Object... params) {
+		protected Boolean doInBackground(Object... params)
+		{
 			loggingIn = true;
 			boolean pnaLoginStatus = ((ConnectionHelper)params[0]).PNALogin(context, (DefaultHttpClient)pnahttpclient);
 			publishProgress(pnaLoginStatus?0:1);
 			return pnaLoginStatus;
 		}
 		@Override
-		protected void onPostExecute(Boolean b) {
+		protected void onPostExecute(Boolean b)
+		{
 			pnalogindone = b;
 			
 			if(logindone && pnalogindone && bbLoginDone && !isCancelled())
@@ -430,24 +471,28 @@ public class ConnectionHelper {
 				Crittercism.leaveBreadcrumb("Logged in (persistent)");
 			}
 		}
-		public void setContext(Context con) {
+		public void setContext(Context con)
+		{
 			context = con;
 		}
-		private void cancelProgressBar() {
+		private void cancelProgressBar()
+		{
 			if(context.getClass().equals(UTilitiesActivity.class))
 				((SherlockActivity)context).setSupportProgressBarIndeterminateVisibility(false);
 			else if(context.getClass().equals(Preferences.class))
 				((SherlockPreferenceActivity)context).setSupportProgressBarIndeterminateVisibility(false);
 		}	
 	}
-    public class bbLoginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask {
+    public class bbLoginTask extends AsyncTask<Object,Integer,Boolean> implements ChangeableContextTask
+	{
 		private DefaultHttpClient pnahttpclient;
 		private DefaultHttpClient httpclient;
 		private DefaultHttpClient bbhttpclient;
 		private Editor edit;
 		private Context context;
     	
-    	public bbLoginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient) {
+    	public bbLoginTask(Context con, DefaultHttpClient httpclient, DefaultHttpClient pnahttpclient, DefaultHttpClient bbhttpclient)
+		{
     		settings = PreferenceManager.getDefaultSharedPreferences(con);
     		edit = settings.edit();
     		this.httpclient = httpclient;
@@ -456,14 +501,16 @@ public class ConnectionHelper {
 			this.context = con;		
 		}
     	@Override
-    	protected Boolean doInBackground(Object... params) {
+    	protected Boolean doInBackground(Object... params)
+		{
 			loggingIn=true;
     		boolean loginStatus = ((ConnectionHelper)params[0]).bbLogin(context, (DefaultHttpClient)bbhttpclient);
 			publishProgress(loginStatus?0:1);
 			return loginStatus;		
 		}
     	@Override
-		protected void onProgressUpdate(Integer... progress) {			
+		protected void onProgressUpdate(Integer... progress)
+		{			
     		switch(progress[0])
 			{
     		case 1:
@@ -477,14 +524,17 @@ public class ConnectionHelper {
 			}
 		}
 		@Override
-		protected void onPostExecute(Boolean b) {
+		protected void onPostExecute(Boolean b)
+		{
 			bbLoginDone = b;
 			
-			if(logindone && pnalogindone && bbLoginDone && !isCancelled()) {
+			if(logindone && pnalogindone && bbLoginDone && !isCancelled())
+			{
 				logindone = false;pnalogindone = false;bbLoginDone=false;
 				loggingIn=false;
 				
-				if(!ConnectionHelper.getAuthCookie(context, httpclient).equals("") && !ConnectionHelper.getPNAAuthCookie(context, pnahttpclient).equals("") && !ConnectionHelper.getBBAuthCookie(context, bbhttpclient).equals("")) {
+				if(!ConnectionHelper.getAuthCookie(context, httpclient).equals("") && !ConnectionHelper.getPNAAuthCookie(context, pnahttpclient).equals("") && !ConnectionHelper.getBBAuthCookie(context, bbhttpclient).equals(""))
+				{
 					Toast.makeText(context, "You're now logged in; feel free to access any of the app's features", Toast.LENGTH_LONG).show();
 					
 					edit.putBoolean("loggedin", true);
@@ -496,10 +546,12 @@ public class ConnectionHelper {
 				Crittercism.leaveBreadcrumb("Logged in (persistent)");
 			}
 		}
-		public void setContext(Context con) {
+		public void setContext(Context con)
+		{
 			context = con;
 		}
-		private void cancelProgressBar() {
+		private void cancelProgressBar()
+		{
 			if(context.getClass().equals(UTilitiesActivity.class))
 				((SherlockActivity)context).setSupportProgressBarIndeterminateVisibility(false);
 			else if(context.getClass().equals(Preferences.class))

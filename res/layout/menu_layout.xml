@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/menu_linlay"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_holo_light"
-    android:showDividers="middle"
-    android:divider="?android:attr/dividerHorizontal"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -39,7 +36,7 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <com.viewpagerindicator.MyTabPageIndicator
+    <com.viewpagerindicator.TabPageIndicator
         android:id="@+id/titles"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />

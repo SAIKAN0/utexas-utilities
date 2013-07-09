@@ -18,7 +18,7 @@ import org.apache.http.util.EntityUtils;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.nasageek.utexasutilities.AsyncTask;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.widget.Toast;
 

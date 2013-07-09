@@ -39,7 +39,7 @@ public class Preferences extends SherlockPreferenceActivity{
     {
     	super.onCreate(savedInstanceState);
 
-    	sp = new SecurePreferences(this,"com.nasageek.utexasutilities.password", false);
+    	sp = new SecurePreferences(this,"com.nasageek.utexasutilities.password", "lalalawhatanicekey", false);
 
    		actionbar = getSupportActionBar();
     	actionbar.setTitle("Preferences");

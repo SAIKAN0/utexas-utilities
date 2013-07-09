@@ -4,9 +4,7 @@ package com.nasageek.utexasutilities.activities;
 import java.util.List;
 import java.util.Vector;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -20,7 +18,6 @@ import com.nasageek.utexasutilities.Utility;
 import com.nasageek.utexasutilities.adapters.MultiPanePagerAdapter;
 import com.nasageek.utexasutilities.fragments.TransactionsFragment;
 import com.nasageek.utexasutilities.fragments.TransactionsFragment.TransactionType;
-import com.viewpagerindicator.MyTabPageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class BalanceActivity extends SherlockFragmentActivity
@@ -56,7 +53,7 @@ public class BalanceActivity extends SherlockFragmentActivity
     	List<SherlockFragment> fragments = new Vector<SherlockFragment>();
         /**
          * this is a bit of a hacky solution for something that should be handled by default.
-         * on a rotate, pager caches the old fragments (with setRetainInstance(true)), but the 
+         * on a rotate, pager caches the old fragments (with setRetainInstance(true), but the 
          * adapter does not, so I have to add the old fragments back to the adapter manually
         */
         if(getSupportFragmentManager().findFragmentByTag(Utility.makeFragmentName(pager.getId(), 0)) != null) {
@@ -68,7 +65,7 @@ public class BalanceActivity extends SherlockFragmentActivity
         	fragments.add(TransactionsFragment.newInstance("Bevo Bucks", TransactionType.Bevo));
         }
         
-        final MyTabPageIndicator tabIndicator = (MyTabPageIndicator)findViewById(R.id.titles);
+        final TabPageIndicator tabIndicator = (TabPageIndicator)findViewById(R.id.titles);
         
         mPagerAdapter = new MultiPanePagerAdapter(getSupportFragmentManager(), fragments);
         mPagerAdapter.setPagesDisplayed(pagesDisplayed);
@@ -81,9 +78,6 @@ public class BalanceActivity extends SherlockFragmentActivity
         	tabIndicator.setSelectAll(true);
 
 		tabIndicator.setViewPager(pager);
-		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		pager.setCurrentItem(Integer.parseInt(sp.getString("default_balance_tab", "0")));
     }
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)

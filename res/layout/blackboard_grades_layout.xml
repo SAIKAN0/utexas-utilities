@@ -8,8 +8,7 @@
 
     <include
         android:id="@+id/grades_progressbar_ll"
-        layout="@layout/loading_content_layout"
-        android:visibility="gone"  />
+        layout="@layout/loading_content_layout" />
 
     <include
         android:id="@+id/grades_error"
@@ -20,6 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent" />
+        android:cacheColorHint="@android:color/transparent"
+        android:visibility="gone" />
 
 </LinearLayout>
