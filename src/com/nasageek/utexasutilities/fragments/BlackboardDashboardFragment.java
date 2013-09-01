@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.acra.ACRA;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -20,7 +19,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
@@ -34,13 +32,10 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -61,8 +56,6 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 	private LinearLayout d_pb_ll;
 	private AmazingListView dlv;
 	private TextView etv;
-	private LinearLayout ell;
-	private Button eb;
 	private TimingLogger tl;
 	private fetchDashboardTask fetch;
 	private boolean longform;
@@ -114,9 +107,7 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 		
 		dlv = (AmazingListView) vg.findViewById(R.id.dash_listview);
 		d_pb_ll = (LinearLayout) vg.findViewById(R.id.dash_progressbar_ll);
-		ell = (LinearLayout) vg.findViewById(R.id.dash_error);
-		etv = (TextView) vg.findViewById(R.id.tv_failure);
-		eb = (Button) vg.findViewById(R.id.button_send_data);
+		etv = (TextView) vg.findViewById(R.id.dash_error);
 		
 		dlv.setAdapter(bda);
 		dlv.setPinnedHeaderView(inflater.inflate(R.layout.menu_header_item_view, dlv, false));
@@ -235,9 +226,6 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 		private DefaultHttpClient client;
 		private String errorMsg = "";
 		private List<ParcelablePair<String, List<FeedItem>>> tempFeedList;
-		private Exception ex;
-		private String pagedata;
-		private Boolean showButton = false;
 		
 		public fetchDashboardTask(DefaultHttpClient client) {
 			this.client = client;
@@ -247,7 +235,7 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 		protected void onPreExecute() {
 			d_pb_ll.setVisibility(View.VISIBLE);
     		dlv.setVisibility(View.GONE);
-			ell.setVisibility(View.GONE); 
+			etv.setVisibility(View.GONE); 
 		}
 		
 		@Override
@@ -280,9 +268,6 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 					return null;
 				} catch (XmlPullParserException e) {
 					errorMsg = "UTilities could not parse the downloaded Dashboard data.";
-					showButton = true;
-					this.pagedata = pagedata;
-					ex = e;
 		        	e.printStackTrace();
 		        	cancel(true);
 		        	return null;	
@@ -307,9 +292,6 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 					return null;
 				} catch(XmlPullParserException e) {
 		    		errorMsg = "UTilities could not parse the downloaded Dashboard data.";
-		    		showButton = true;
-		    		this.pagedata = pagedata;
-		    		ex = e;
 		    		e.printStackTrace();
 		    		cancel(true);
 		    		return null;	        	 
@@ -327,39 +309,14 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 			tl.addSplit("Adapter created");
 			d_pb_ll.setVisibility(View.GONE);
 			dlv.setVisibility(View.VISIBLE);
-			ell.setVisibility(View.GONE);	
+			etv.setVisibility(View.GONE);	
 		}
 		@Override
 		protected void onCancelled(List<ParcelablePair<String, List<FeedItem>>> result) {
 			etv.setText(errorMsg);
-			if(showButton) {
-				eb.setText("Send anonymous information about the dashboard to the developer to help improve UTilities.");
-				eb.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						if(pagedata != null && ex != null) {
-							SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity().getBaseContext()); 
-							if(!sp.getBoolean("acra.enable", true))
-								ACRA.getErrorReporter().setEnabled(true);
-							ACRA.getErrorReporter().putCustomData("xmldata", pagedata);
-				        	ACRA.getErrorReporter().handleException(ex);
-				        	ACRA.getErrorReporter().removeCustomData("xmldata");
-				        	if(!sp.getBoolean("acra.enable", true))
-								ACRA.getErrorReporter().setEnabled(false);
-				        	Toast.makeText(getSherlockActivity(), "Data is being sent, thanks for helping out!", Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(getSherlockActivity(), "Couldn't send the dashboard data for some reason :(", Toast.LENGTH_SHORT).show();
-						}
-						v.setVisibility(View.INVISIBLE);
-						
-					}
-				});
-				eb.setVisibility(View.VISIBLE);
-			}
 			d_pb_ll.setVisibility(View.GONE);
     		dlv.setVisibility(View.GONE);
-			ell.setVisibility(View.VISIBLE); 
+			etv.setVisibility(View.VISIBLE); 
 		}
 	}
 	
@@ -444,7 +401,8 @@ public class BlackboardDashboardFragment extends SherlockFragment {
 				
 			if(!isEnabled(position)) {	
 				TypedValue tv = new TypedValue();
-				if(getSherlockActivity().getTheme().resolveAttribute(android.R.attr.textColorTertiary, tv, true)) {	
+				if(getSherlockActivity().getTheme().resolveAttribute(android.R.attr.textColorTertiary, tv, true))	
+				{	
 					TypedArray arr = getSherlockActivity().obtainStyledAttributes(tv.resourceId, new int[] {android.R.attr.textColorTertiary});
 					message.setTextColor(arr.getColor(0, Color.BLACK));
 					courseName.setTextColor(arr.getColor(0, Color.BLACK));

@@ -94,7 +94,7 @@ public class AboutMeActivity extends SherlockFragmentActivity
     	return false;
 	}
 
-	public static class PrivacyPolicyDialog extends SherlockDialogFragment
+	class PrivacyPolicyDialog extends SherlockDialogFragment
 	{
 	//	private TextView policyText;
 		private Button dismissButton;
@@ -113,7 +113,7 @@ public class AboutMeActivity extends SherlockFragmentActivity
 		}
 	}
 	
-	public static class LibraryLicenseDialog extends SherlockDialogFragment
+	class LibraryLicenseDialog extends SherlockDialogFragment
 	{
 		private TextView licenseTextView;
 		private Button dismissButton;
@@ -126,7 +126,7 @@ public class AboutMeActivity extends SherlockFragmentActivity
 			View view = getActivity().getLayoutInflater().inflate(R.layout.license_dialog_fragment, null);
 			AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
 			String licenseText = getString(R.string.licenses) + "\n\n" + "Legal Notices:" + "\n\n" + 
-					GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getActivity());
+					GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(AboutMeActivity.this);
 			
 			
 	//		licenseTextView = (TextView) view.findViewById(R.id.license_text);

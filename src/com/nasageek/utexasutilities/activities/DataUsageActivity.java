@@ -65,7 +65,6 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	private ProgressBar mProgress;
 	private TextView dataUsedText;
 	private TextView detv;
-	private LinearLayout dell;
 	private String usedText;
 	private LinearLayout d_pb_ll;
 	private ActionBar actionbar;
@@ -85,7 +84,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 	//	pd = ProgressDialog.show(DataUsageActivity.this, "", "Loading...");
 		
@@ -94,8 +94,7 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 		d_pb_ll = (LinearLayout) findViewById(R.id.data_progressbar_ll);
 		dataUsedText = (TextView) findViewById(R.id.dataUsedText);
 		mProgress = (ProgressBar) findViewById(R.id.percentDataUsed);
-		dell = (LinearLayout) findViewById(R.id.data_error);
-		detv = (TextView) findViewById(R.id.tv_failure);
+		detv = (TextView) findViewById(R.id.data_error);
 //		mProgress.setBackgroundColor(Color.rgb(204,85,0));
 		
 		actionbar = getSupportActionBar();
@@ -267,24 +266,29 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 			maxXY.x = maxXY.x + (double) (maxDif - (maxXY.x - minXY.x));
 		graph.setDomainBoundaries(minXY.x, maxXY.x, BoundaryMode.FIXED);
 	}
-	private class fetchProgressTask extends AsyncTask<Object,Void,Void> {
+	private class fetchProgressTask extends AsyncTask<Object,Void,Void>
+	{
 		private DefaultHttpClient client;
 		
-		public fetchProgressTask(DefaultHttpClient client) {
+		public fetchProgressTask(DefaultHttpClient client)
+		{
 			this.client = client;
 		}
 		
 		@Override
-		protected Void doInBackground(Object... params) {
+		protected Void doInBackground(Object... params)
+		{
 			HttpGet hget = new HttpGet("https://management.pna.utexas.edu/server/graph.cgi");
 			
 	    	String pagedata="";
 
-	    	try {	
+	    	try
+			{	
 				HttpResponse response = client.execute(hget);
 		    	pagedata = EntityUtils.toString(response.getEntity());
 	
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				cancel(true);
 				e.printStackTrace();
 			}
@@ -305,32 +309,38 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 			return null;
 		}
 		@Override
-		protected void onPostExecute(Void v) {
+		protected void onPostExecute(Void v)
+		{
 			dataUsedText.setText(usedText);
 			mProgress.setProgress((int)(percentused*10));	
 		}
 		@Override
-		protected void onCancelled() {
+		protected void onCancelled()
+		{
 			dataUsedText.setText("UTilities could not fetch your % data usage");
 		}	
 	}
-	private class fetchDataTask extends AsyncTask<Object,Void,Character> {
+	private class fetchDataTask extends AsyncTask<Object,Void,Character>
+	{
 		private DefaultHttpClient client;
 		private String errorMsg;
 		
-		public fetchDataTask(DefaultHttpClient client) {
+		public fetchDataTask(DefaultHttpClient client)
+		{
 			this.client = client;
 		}
 		
 		@Override
-		protected Character doInBackground(Object... params) {
+		protected Character doInBackground(Object... params)
+		{
 	//		DefaultHttpClient httpclient = ch.getThreadSafeClient();
 			HttpGet hget = null;
 			Pattern authidpattern = Pattern.compile("(?<=%20)\\d+");
 	    	Matcher authidmatcher = authidpattern.matcher(client.getCookieStore().getCookies().get(0).getValue());
 			if(authidmatcher.find())
 				hget = new HttpGet("https://management.pna.utexas.edu/server/get-bw-graph-data.cgi?authid="+authidmatcher.group());
-			else {
+			else
+			{
 				cancel(true);
 				errorMsg = "UTilities could not fetch your data usage"; 
 				Log.d(DataUsageActivity.class.getSimpleName(), "No authid found");
@@ -339,10 +349,12 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 			
 	    	String pagedata="";
 
-	    	try {				
+	    	try
+			{				
 				HttpResponse response = client.execute(hget);
 		    	pagedata = EntityUtils.toString(response.getEntity());
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				cancel(true);
 				errorMsg = "UTilities could not fetch your data usage"; 
 				e.printStackTrace();
@@ -351,7 +363,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	    	
 	    	
 	    	String[] lines = pagedata.split("\n");
-	    	if(!lines[0].equals("Date,MB In,MB Out,MB Total")) {
+	    	if(!lines[0].equals("Date,MB In,MB Out,MB Total"))
+	    	{
 				cancel(true);
 				errorMsg = "UTilities could not fetch your data usage"; 
 				return ' ';
@@ -359,7 +372,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	    	Calendar date = Calendar.getInstance();
 	    	
 	    	//if there's more than a week of data, show just the last week, otherwise show it all
-	    	for(int i = lines.length >= 288 ? lines.length-288 : 0, x=0; i<lines.length; i++,x++) {
+	    	for(int i = lines.length >= 288 ? lines.length-288 : 0, x=0; i<lines.length; i++,x++) 
+	    	{
 	    		String[] entry = lines[i].split(",");
 	    		date.clear();
 	    		try{
@@ -370,7 +384,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	    				Integer.parseInt(entry[0].split(" |:")[1]),
 	    				Integer.parseInt(entry[0].split(" |:")[2]));
 	    		}
-	    		catch(NumberFormatException nfe) {
+	    		catch(NumberFormatException nfe)
+	    		{
 	    			cancel(true);
 					errorMsg = "UTilities could not fetch your data usage"; 
 					nfe.printStackTrace();
@@ -388,7 +403,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	    	return ' ';
 		}
 		@Override
-		protected void onPostExecute(Character result) {
+		protected void onPostExecute(Character result)
+		{
 			XYSeries series = new SimpleXYSeries(Arrays.asList(labels), Arrays.asList(downdata),  "Downloaded");
 			XYSeries seriestotal = new SimpleXYSeries(Arrays.asList(labels), Arrays.asList(totaldata),  "Uploaded");
 			
@@ -461,6 +477,9 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 			graph.setDomainStep(XYStepMode.INCREMENT_BY_VAL,1800000);
 			graph.setRangeStep(XYStepMode.INCREMENT_BY_VAL,30);
 			
+			
+			
+			
 			graph.calculateMinMaxVals();
 			minXY = new PointD(graph.getCalculatedMinX().doubleValue(),
 					graph.getCalculatedMinY().doubleValue()); //initial minimum data point
@@ -468,11 +487,12 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 			//TODO: this crashes with a NPE sometimes.  ??
 			//absolute minimum value for the domain boundary maximum
 			Number temp = series.getX(1);
-			if(temp == null) {
+			if(temp == null)
+			{
 				errorMsg = "There was an error fetching or displaying your data usage.";
 				detv.setText(errorMsg);
 				d_pb_ll.setVisibility(View.GONE);
-				dell.setVisibility(View.VISIBLE);
+				detv.setVisibility(View.VISIBLE);
 				return;
 			}
 			minNoError = Math.round(temp.doubleValue() + 2);
@@ -500,10 +520,10 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 				temp1 = temp2;
 				temp2 = temp3;
 			}*/
-			minDif = 3000000;
-			maxDif  = 33000000;
+			minDif=3000000;
+			maxDif=33000000;
 			
-			graph.setRangeUpperBoundary(maxXY.y > 31 ? maxXY.y : 31, BoundaryMode.FIXED);
+			graph.setRangeUpperBoundary(maxXY.y>31?maxXY.y:31, BoundaryMode.FIXED);
 			graph.setRangeLowerBoundary(0, BoundaryMode.FIXED);
 			graph.setDomainUpperBoundary(maxXY.x, BoundaryMode.FIXED);
 			graph.setDomainLowerBoundary(minXY.x, BoundaryMode.FIXED);
@@ -519,15 +539,18 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 	    	Toast.makeText(DataUsageActivity.this, "Swipe up and down to zoom in and out", Toast.LENGTH_SHORT).show();
 		}
 		@Override
-		protected void onCancelled() {
+		protected void onCancelled()
+		{
 			detv.setText(errorMsg);
 			d_pb_ll.setVisibility(View.GONE);
-			dell.setVisibility(View.VISIBLE);
+			detv.setVisibility(View.VISIBLE);
 		}
 	}
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
 			case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	            super.onBackPressed();
@@ -535,7 +558,8 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 		}
 		return true;
 	}
-	private class TimeFormat extends Format {
+	 private class TimeFormat extends Format 
+	 {
 
 		private static final long serialVersionUID = 1L;
 		// create a simple date format that draws on the year portion of our timestamp.
@@ -546,6 +570,7 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
 
          @Override
          public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+ 
         	 long timestamp = ((Number) obj).longValue();
              Date date = new Date(timestamp);
              return dateFormat.format(date, toAppendTo, pos);
@@ -553,13 +578,17 @@ public class DataUsageActivity extends SherlockActivity implements OnTouchListen
          @Override
          public Object parseObject(String source, ParsePosition pos) {
              return null;
+
          }
-	}
-	private class PointD {
-		double x,y;
-		public PointD(double x, double y) {
-			this.x=x;
-			this.y=y;
-		}
-	}	
+   
+ }
+	 private class PointD
+	 {
+		 double x,y;
+		 public PointD(double x, double y)
+		 {
+			 this.x=x;
+			 this.y=y;
+		 }
+	 }	
 }
